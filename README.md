@@ -68,7 +68,7 @@ Deploying Small Language Models (0.5B) on legacy x86_64 CPUs surfaced three crit
 
 ### 1. Clone & Prepare Directory
 ```bash
-git clone [https://github.com/Mic87xp1/affordable-ai-edge-gateway.git](https://github.com/Mic87xp1/affordable-ai-edge-gateway.git)
+git clone https://github.com/Mic87xp1/affordable-ai-edge-gateway.git
 cd affordable-ai-edge-gateway
 cp config/config.yaml.example config/config.yaml
 ```
@@ -88,6 +88,14 @@ Edit `config/config.yaml` with your Google AI Studio API key (or export `GEMINI_
 export PYTHONPATH=$PYTHONPATH:$(pwd)/scripts
 litellm --config config/config.yaml --port 4000
 ```
+
+### 4. Configure Open WebUI (Critical for 0.5B Models)
+Connect Open WebUI to LiteLLM by adding `http://localhost:4000/v1` as an OpenAI-compatible API endpoint. Then, edit the model profiles for `smart-agent` and `local-coder` (**Workspace → Models → Edit**):
+
+1. **Capabilities:** Uncheck **Vision**, **Web Search**, **Image Generation**, and **Code Interpreter**.
+2. **Built-in Tools / Default Features:** Disable **Memory** and any active tool/function calling integrations.
+
+> **Why this matters:** Leaving these enabled injects large JSON tool schemas into every prompt, overwhelming 0.5B parameter models and causing immediate CPU prefill timeouts or raw JSON output.
 
 ---
 
