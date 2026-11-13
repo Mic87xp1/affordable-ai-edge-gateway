@@ -28,7 +28,7 @@ Running modern LLMs purely on legacy CPUs without dedicated GPUs often leads to 
 
 * **Host Machine:** Lenovo ThinkCentre M73 Tiny (Legacy Enterprise Mini PC)
 * **CPU:** Intel Core i3-4130T (Haswell Dual-Core, 2.90 GHz, 35W TDP, CPU-only inference)
-* **RAM:** 16 GB DDR3 (Replicable on 4 GB – 8 GB systems due to 0.5B parameter footprint)
+* **RAM:** 8 GB DDR3 (Replicable down to 4 GB systems thanks to the ultra-low 0.5B parameter footprint)
 * **OS:** DietPi OS (Debian-based, minimal memory footprint)
 * **Inference & Routing Stack:**
   * **Ollama:** Local model runtime (`qwen2.5:0.5b`, `qwen2.5-coder:0.5b`)
