@@ -1,0 +1,43 @@
+litellm_settings:
+  drop_params: true
+  callbacks:
+    - model_footer.proxy_handler_instance
+
+model_list:
+  # 1. General local chat -> falls back to Gemini if latency exceeds 10s
+  - model_name: smart-agent
+    litellm_params:
+      model: ollama/local-worker
+      api_base: http://localhost:11434
+      connect_timeout: 2
+      timeout: 10
+      max_retries: 0
+      allowed_openai_params: ["messages", "model", "stream", "temperature", "max_tokens"]
+
+  # 2. Local coding assistant -> falls back to Gemini if latency exceeds 10s
+  - model_name: local-coder
+    litellm_params:
+      model: ollama/qwen2.5-coder:0.5b
+      api_base: http://localhost:11434
+      connect_timeout: 2
+      timeout: 10
+      max_retries: 0
+      allowed_openai_params: ["messages", "model", "stream", "temperature", "max_tokens"]
+
+  # 3. Cloud fallback (triggered automatically when local workers time out)
+  - model_name: gemini-cloud
+    litellm_params:
+      model: gemini/gemini-3.5-flash-lite
+      api_key: "YOUR_GEMINI_API_KEY"
+      timeout: 20
+      max_retries: 0
+
+router_settings:
+  fallbacks:
+    - {"smart-agent": ["gemini-cloud"]}
+    - {"local-coder": ["gemini-cloud"]}
+  allowed_fails: 1
+  num_retries: 0
+
+general_settings:
+  dangerously_permit_weak_or_unset_master_key: true
